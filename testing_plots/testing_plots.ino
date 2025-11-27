@@ -1,12 +1,16 @@
 /***************************************************
-  4x SHT41 (內部, via TCA9548A ch0~3)
-  1x SHT41 (外部, via TCA9548A ch4)
+  4x Internal SHT41 (via TCA9548A channels 0~3)
+  1x External SHT41 (via TCA9548A channel 4)
 
-  4x Servo on Adafruit 16-Channel Servo Shield
+  4x Servo motors on Adafruit 16-Channel Servo Shield
      (PCA9685 channels 8~11)
 
-  PID 控制 vent 開度 (0°=全開, 180°=全關)
-  外部溫度會限制最大開口 (外面越冷 -> vent 越關)
+  PID control for vent opening
+     0° = fully open
+     180° = fully closed
+
+  External (ambient) temperature limits maximum vent opening
+     Colder outside → vents close more
 ****************************************************/
 
 #include <Wire.h>
@@ -60,14 +64,14 @@ int angleToMicros(int angle){
 }
 
 // ================= Comfort parameters =================
-const float T_SET = 25.0;
-const float H_SET = 50.0;
+const float T_SET = 20.0;
+const float H_SET = 40.0;
 
 float W_T = 0.6;
 float W_H = 0.4;
 
 // ================= PID parameters =================
-const float Kp = 15.0;
+const float Kp = 6.0;
 const float Ki = 0.5;
 const float Kd = 0.0;
 
@@ -157,7 +161,7 @@ void loop(){
   static unsigned long lastMs = 0;
   unsigned long now = millis();
 
-  if(now - lastMs < 250) return;
+  if(now - lastMs < 500) return;
   lastMs = now;
 
   // ================= External sensor =================
@@ -250,5 +254,4 @@ void loop(){
 
   Serial.println();
 
-  delay(1000);
 }
