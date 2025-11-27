@@ -122,8 +122,8 @@ void setup(){
   pwm.begin();
   pwm.setPWMFreq(SERVO_FREQ);
   delay(10);
-  setAllServosToZero();
-  delay(500);
+ // setAllServosToZero();
+  //delay(500);
 
   // Initialize internal sensors
   Serial.println("Init 4x internal SHT41...");
@@ -146,7 +146,7 @@ void setup(){
     lastAngleCmd[i] = 180;
 
     int us = angleToMicros(180);
-    // pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
+    pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
   }
 
   // Initialize external sensor
@@ -236,7 +236,7 @@ void loop(){
     angleScaled = constrain(angleScaled, 0, 180);
 
     int us = angleToMicros(angleScaled);
-    // m.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
+    pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
     AllAngleScaled[i] = angleScaled;
   }
 
