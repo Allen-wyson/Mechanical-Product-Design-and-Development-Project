@@ -63,6 +63,13 @@ int angleToMicros(int angle){
   return PULSE_MIN_US + (long)(PULSE_MAX_US - PULSE_MIN_US) * angle / 180;
 }
 
+void setAllServosToZero() {
+  for (uint8_t i = 0; i < NUM_VENTS; i++) {
+    int us = angleToMicros(180);  // 0° → 500µs
+    pwm.setPWM(servoChannels[i], 0, pwmTicksFromMicros(us));
+  }
+}
+
 // ================= Comfort parameters =================
 const float T_SET = 20.0;
 const float H_SET = 40.0;
@@ -71,8 +78,8 @@ float W_T = 0.6;
 float W_H = 0.4;
 
 // ================= PID parameters =================
-const float Kp = 6.0;
-const float Ki = 0.5;
+const float Kp = 12.0;
+const float Ki = 0.8;
 const float Kd = 0.0;
 
 const float DT = 0.25;
@@ -115,6 +122,8 @@ void setup(){
   pwm.begin();
   pwm.setPWMFreq(SERVO_FREQ);
   delay(10);
+  setAllServosToZero();
+  delay(500);
 
   // Initialize internal sensors
   Serial.println("Init 4x internal SHT41...");
@@ -137,7 +146,7 @@ void setup(){
     lastAngleCmd[i] = 180;
 
     int us = angleToMicros(180);
-    pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
+    // pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
   }
 
   // Initialize external sensor
@@ -227,7 +236,7 @@ void loop(){
     angleScaled = constrain(angleScaled, 0, 180);
 
     int us = angleToMicros(angleScaled);
-    pwm.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
+    // m.setPWM(servoChannels[i],0,pwmTicksFromMicros(us));
     AllAngleScaled[i] = angleScaled;
   }
 

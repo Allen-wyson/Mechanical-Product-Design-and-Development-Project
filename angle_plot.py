@@ -8,7 +8,7 @@ from collections import deque
 # ---------------------------
 # CONFIGURATION
 # ---------------------------
-PORT = "COM8"         # <-- Mets ton port Arduino
+PORT = "COM4"         # <-- Mets ton port Arduino
 BAUD = 115200
 CSV_FILE = "sht41_angles_log.csv"
 
